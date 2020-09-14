@@ -8,8 +8,11 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-        <Button Content="Scan for Device" HorizontalAlignment="Center" Margin="0,255,0,0" VerticalAlignment="Top" Height="50" Width="187" Click="StartWatcher" />
-        
+    <Grid Margin="10,10,0,0">
+        <Button x:Name="ScanButton" Content="Scan for Device" HorizontalAlignment="Center" Margin="0,136,0,0" VerticalAlignment="Top" Height="50" Width="187" Click="StartWatcher" />
+        <Button x:Name="StopButton" Content="Stop Scan" HorizontalAlignment="Center" Margin="0,216,0,0" VerticalAlignment="Top" Height="50" Width="187" Click="StopWatcher" />
+        <Viewbox Margin="589,301,587,586" Stretch="Uniform">
+            <TextBlock x:Name="Status" Text="Status: Not Connected" TextWrapping="Wrap" HorizontalAlignment="Center" />
+        </Viewbox>
     </Grid>
 </Page>

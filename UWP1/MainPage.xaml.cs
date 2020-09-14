@@ -33,13 +33,17 @@ namespace UWP1
         Guid ServiceUuid = BluetoothUuidHelper.FromShortId(0x180C);
         Guid CharacteristicUuid = BluetoothUuidHelper.FromShortId(0x2A56);
         GattCharacteristic readChar;
+        BluetoothLEAdvertisementWatcher watcher;
 
         public MainPage()
         {
             this.InitializeComponent();
+
+            ScanButton.IsEnabled = true;
+            StopButton.IsEnabled = false;
         }
 
-        public void StartWatcher()
+        private void StartWatcher(object sender, RoutedEventArgs e)
         {
             /*
             BluetoothLEAdvertisementPublisher publisher = new BluetoothLEAdvertisementPublisher();
@@ -60,9 +64,14 @@ namespace UWP1
 
             publisher.Start();*/
 
-            BluetoothLEAdvertisementWatcher watcher = new BluetoothLEAdvertisementWatcher();
+            watcher = new BluetoothLEAdvertisementWatcher();
             watcher.Received += OnAdvertisementReceived;
+            // watcher.Stopped += OnWatcherStop;
             watcher.Start();
+
+            ScanButton.IsEnabled = false;
+            StopButton.IsEnabled = true;
+
             Debug.WriteLine("test");
         }
 
@@ -85,13 +94,22 @@ namespace UWP1
             GattDeviceServicesResult result = await device.GetGattServicesAsync();
             if (result.Status == GattCommunicationStatus.Success)
             {
+                //var services = result.Services;
+                //GattDeviceService servic = services.Find(c => c.Uuid.Equals(ServiceUuid));
                 GattDeviceService service = GetService(result);
 
                 GattCharacteristicsResult charResult = await service.GetCharacteristicsAsync();
                 if (charResult.Status == GattCommunicationStatus.Success)
                 {
-                    GattCharacteristic characteristic = GetCharacteristic(charResult);
-                    this.readChar = characteristic;
+                    this.readChar = GetCharacteristic(charResult);
+
+                    Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                        {
+                            StopButton.IsEnabled = false;
+                            ScanButton.IsEnabled = true;
+                            Status.Text = "Status: Connected to Arduino Nano";
+                        }
+                    );
                 }
             }
         }
@@ -115,7 +133,7 @@ namespace UWP1
         {
             var characteristics = result.Characteristics;
 
-            foreach(GattCharacteristic characteristic in characteristics)
+            foreach (GattCharacteristic characteristic in characteristics)
             {
                 if (characteristic.Uuid.Equals(CharacteristicUuid))
                 {
@@ -124,6 +142,15 @@ namespace UWP1
                 }
             }
             return null;
+        }
+
+        private async void StopWatcher(object sender, RoutedEventArgs e)
+        {
+            watcher.Stop();
+
+            StopButton.IsEnabled = false;
+            ScanButton.IsEnabled = true;
+            Status.Text = "Status: Not Connected";
         }
     }
 }
