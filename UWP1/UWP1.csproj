@@ -119,6 +119,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataReceivedEventArgs.cs" />
+    <Compile Include="DeviceConnectedEventArgs.cs" />
+    <Compile Include="IMUBluetoothClient.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

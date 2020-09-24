@@ -14,13 +14,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.Storage.Streams;
-using Windows.Devices.Bluetooth;
-using Windows.Devices.Bluetooth.Advertisement;
-using Windows.Devices.Bluetooth.GenericAttributeProfile;
-using Windows.Devices.Enumeration;
 using System.Diagnostics;
-
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
+using Windows.UI.Core;
 
 namespace UWP1
 {
@@ -29,128 +24,78 @@ namespace UWP1
     /// </summary>
     public sealed partial class MainPage : Page
     {
-
-        Guid ServiceUuid = BluetoothUuidHelper.FromShortId(0x180C);
-        Guid CharacteristicUuid = BluetoothUuidHelper.FromShortId(0x2A56);
-        GattCharacteristic readChar;
-        BluetoothLEAdvertisementWatcher watcher;
+        IMUBluetoothClient Client;
 
         public MainPage()
         {
             this.InitializeComponent();
+            Client = new IMUBluetoothClient();
+            Client.DeviceConnected += ClientDeviceConnected;
+            Client.ServiceRetrieved += ClientServiceRetrieved;
+            Client.CharacteristicRetrieved += ClientCharacteristicRetrieved;
+            Client.DataReceived += ClientDataRecieved;
 
             ScanButton.IsEnabled = true;
             StopButton.IsEnabled = false;
         }
 
-        private void StartWatcher(object sender, RoutedEventArgs e)
+        private async void StartWatcher(object sender, RoutedEventArgs e)
         {
-            /*
-            BluetoothLEAdvertisementPublisher publisher = new BluetoothLEAdvertisementPublisher();
-
-            // Add custom data to the advertisement
-            var manufacturerData = new BluetoothLEManufacturerData();
-            manufacturerData.CompanyId = 0xFFFE;
-
-            var writer = new DataWriter();
-            writer.WriteString("Hello World");
-
-            // Make sure that the buffer length can fit within an advertisement payload (~20 bytes). 
-            // Otherwise you will get an exception.
-            manufacturerData.Data = writer.DetachBuffer();
-
-            // Add the manufacturer data to the advertisement publisher:
-            publisher.Advertisement.ManufacturerData.Add(manufacturerData);
-
-            publisher.Start();*/
-
-            watcher = new BluetoothLEAdvertisementWatcher();
-            watcher.Received += OnAdvertisementReceived;
-            // watcher.Stopped += OnWatcherStop;
-            watcher.Start();
-
-            ScanButton.IsEnabled = false;
-            StopButton.IsEnabled = true;
-
-            Debug.WriteLine("test");
-        }
-
-        private async void OnAdvertisementReceived(BluetoothLEAdvertisementWatcher watcher, BluetoothLEAdvertisementReceivedEventArgs eventArgs)
-        {
-            Debug.Write("Ad ");
-            string deviceName = eventArgs.Advertisement.LocalName;
-            Debug.WriteLine(deviceName);
-            
-            if (deviceName == "Nano33BLE")
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                watcher.Stop();
-                BluetoothLEDevice device = await BluetoothLEDevice.FromBluetoothAddressAsync(eventArgs.BluetoothAddress);
-                SetupDeviceIO(device);
-            }
-        }
+                ScanButton.IsEnabled = false;
+                StopButton.IsEnabled = true;
+                Status.Text = "Searching for device...";
+            });
 
-        private async void SetupDeviceIO(BluetoothLEDevice device)
-        {
-            GattDeviceServicesResult result = await device.GetGattServicesAsync();
-            if (result.Status == GattCommunicationStatus.Success)
-            {
-                //var services = result.Services;
-                //GattDeviceService servic = services.Find(c => c.Uuid.Equals(ServiceUuid));
-                GattDeviceService service = GetService(result);
-
-                GattCharacteristicsResult charResult = await service.GetCharacteristicsAsync();
-                if (charResult.Status == GattCommunicationStatus.Success)
-                {
-                    this.readChar = GetCharacteristic(charResult);
-
-                    Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-                        {
-                            StopButton.IsEnabled = false;
-                            ScanButton.IsEnabled = true;
-                            Status.Text = "Status: Connected to Arduino Nano";
-                        }
-                    );
-                }
-            }
-        }
-
-        private GattDeviceService GetService(GattDeviceServicesResult result)
-        {
-            var services = result.Services;
-
-            foreach (GattDeviceService service in services)
-            {
-                if (service.Uuid.Equals(ServiceUuid))
-                {
-                    Debug.WriteLine("Subscription found");
-                    return service;
-                }
-            }
-            return null;
-        }
-
-        private GattCharacteristic GetCharacteristic(GattCharacteristicsResult result)
-        {
-            var characteristics = result.Characteristics;
-
-            foreach (GattCharacteristic characteristic in characteristics)
-            {
-                if (characteristic.Uuid.Equals(CharacteristicUuid))
-                {
-                    Debug.WriteLine("Char found");
-                    return characteristic;
-                }
-            }
-            return null;
+            Debug.WriteLine("begin scan");
+            Client.StartWatcher();
         }
 
         private async void StopWatcher(object sender, RoutedEventArgs e)
         {
-            watcher.Stop();
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                ScanButton.IsEnabled = true;
+                StopButton.IsEnabled = false;
+            });
 
-            StopButton.IsEnabled = false;
-            ScanButton.IsEnabled = true;
+            Debug.WriteLine("stop scan");
             Status.Text = "Status: Not Connected";
+            Client.StopWatcher();
+        }
+
+        private async void ClientDeviceConnected(object sender, DeviceConnectedEventArgs e)
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                Status.Text = "Connected. Retrieving IMU Service...";
+            });
+        }
+
+        private async void ClientServiceRetrieved(object sender, EventArgs e)
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                Status.Text = "Connected. Subscribing to Updates...";
+            });
+        }
+
+        private async void ClientCharacteristicRetrieved(object sender, EventArgs e)
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                Status.Text = "Connected.";
+            });
+        }
+
+        private async void ClientDataRecieved(object sender, DataReceivedEventArgs e)
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                //Status.Text = "Data Received: " + e.Value.ToString();
+
+            });
         }
     }
 }

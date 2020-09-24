@@ -8,11 +8,23 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid Margin="10,10,0,0">
+    <Grid Margin="10,10,10,10">
         <Button x:Name="ScanButton" Content="Scan for Device" HorizontalAlignment="Center" Margin="0,136,0,0" VerticalAlignment="Top" Height="50" Width="187" Click="StartWatcher" />
         <Button x:Name="StopButton" Content="Stop Scan" HorizontalAlignment="Center" Margin="0,216,0,0" VerticalAlignment="Top" Height="50" Width="187" Click="StopWatcher" />
-        <Viewbox Margin="589,301,587,586" Stretch="Uniform">
-            <TextBlock x:Name="Status" Text="Status: Not Connected" TextWrapping="Wrap" HorizontalAlignment="Center" />
-        </Viewbox>
+        <TextBlock x:Name="Status" Text="Status: Not Connected" TextWrapping="Wrap" HorizontalAlignment="Left" Height="39" VerticalAlignment="Top" Margin="881,321,0,0" Width="169" />
+        <Grid Margin="659,410,657,284">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Vertical" Margin="0,92,0,0" Grid.Row="1">
+                <TextBlock Text="Acc X" HorizontalAlignment="Center" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="Acc Y" HorizontalAlignment="Center" />
+                    <TextBlock Text="Acc Z" HorizontalAlignment="Center" />
+                </StackPanel>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Page>
