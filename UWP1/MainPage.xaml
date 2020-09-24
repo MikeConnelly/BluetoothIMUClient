@@ -11,18 +11,18 @@
     <Grid Margin="10,10,10,10">
         <Button x:Name="ScanButton" Content="Scan for Device" HorizontalAlignment="Center" Margin="0,136,0,0" VerticalAlignment="Top" Height="50" Width="187" Click="StartWatcher" />
         <Button x:Name="StopButton" Content="Stop Scan" HorizontalAlignment="Center" Margin="0,216,0,0" VerticalAlignment="Top" Height="50" Width="187" Click="StopWatcher" />
-        <TextBlock x:Name="Status" Text="Status: Not Connected" TextWrapping="Wrap" HorizontalAlignment="Left" Height="39" VerticalAlignment="Top" Margin="881,321,0,0" Width="169" />
+        <TextBlock x:Name="Status" Text="Status: Not Connected" TextWrapping="Wrap" Height="39" VerticalAlignment="Top" Margin="881,326,850,0" Width="169" />
 
-        <TextBlock Margin="585,406,1199,626"><Run x:Name="AX" Text="Acc X: 0m/s"/><Run Typography.Variants="Superscript" Text="2"/></TextBlock>
-        <TextBlock Margin="585,460,1199,572"><Run x:Name="AY" Text="Acc Y: 0m/s"/><Run Typography.Variants="Superscript" Text="2"/></TextBlock>
-        <TextBlock Margin="585,511,1199,521"><Run x:Name="AZ" Text="Acc Z: 0m/s"/><Run Typography.Variants="Superscript" Text="2"/></TextBlock>
+        <TextBlock Width="169" Margin="585,406,1199,0"><Run x:Name="AX" Text="Acc X: 0m/s"/><Run Typography.Variants="Superscript" Text="2"/></TextBlock>
+        <TextBlock Width="169" Margin="585,460,1199,0"><Run x:Name="AY" Text="Acc Y: 0m/s"/><Run Typography.Variants="Superscript" Text="2"/></TextBlock>
+        <TextBlock Width="169" Margin="585,511,1199,0"><Run x:Name="AZ" Text="Acc Z: 0m/s"/><Run Typography.Variants="Superscript" Text="2"/></TextBlock>
 
-        <TextBlock x:Name="VX" Margin="899,400,885,632" Text="Vel X: 0m/s"/>
-        <TextBlock x:Name="VY" Margin="899,454,885,578" Text="Vel Y: 0m/s"/>
-        <TextBlock x:Name="VZ" Margin="899,505,885,527" Text="Vel Z: 0m/s"/>
+        <TextBlock Width="169" x:Name="VX" Margin="899,400,885,0" Text="Vel X: 0m/s"/>
+        <TextBlock Width="169" x:Name="VY" Margin="899,454,885,0" Text="Vel Y: 0m/s"/>
+        <TextBlock Width="169" x:Name="VZ" Margin="899,505,885,0" Text="Vel Z: 0m/s"/>
 
-        <TextBlock x:Name="PX" Margin="1163,400,621,632" Text="Pos X: 0m"/>
-        <TextBlock x:Name="PY" Margin="1163,454,621,578" Text="Pos X: 0m"/>
-        <TextBlock x:Name="PZ" Margin="1163,505,621,527" Text="Pos X: 0m"/>
+        <TextBlock Width="169" x:Name="PX" Margin="1163,400,621,0" Text="Pos X: 0m"/>
+        <TextBlock Width="169" x:Name="PY" Margin="1163,454,621,0" Text="Pos Y: 0m"/>
+        <TextBlock Width="169" x:Name="PZ" Margin="1163,505,621,0" Text="Pos Z: 0m"/>
     </Grid>
 </Page>
