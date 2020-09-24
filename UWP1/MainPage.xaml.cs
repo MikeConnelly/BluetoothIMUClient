@@ -93,8 +93,36 @@ namespace UWP1
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                //Status.Text = "Data Received: " + e.Value.ToString();
-
+                switch (e.FieldIndex)
+                {
+                    case 1:
+                        AX.Text = String.Format("Acc X: {0}m/s", e.Value);
+                        break;
+                    case 2:
+                        AY.Text = String.Format("Acc Y: {0}m/s", e.Value);
+                        break;
+                    case 3:
+                        AZ.Text = String.Format("Acc Z: {0}m/s", e.Value);
+                        break;
+                    case 4:
+                        VX.Text = String.Format("Vel X: {0}m/s", e.Value);
+                        break;
+                    case 5:
+                        VY.Text = String.Format("Vel Y: {0}m/s", e.Value);
+                        break;
+                    case 6:
+                        VZ.Text = String.Format("Vel Z: {0}m/s", e.Value);
+                        break;
+                    case 7:
+                        PX.Text = String.Format("Pos X: {0}m/s", e.Value);
+                        break;
+                    case 8:
+                        PY.Text = String.Format("Pos Y: {0}m/s", e.Value);
+                        break;
+                    case 9:
+                        PZ.Text = String.Format("Pos Z: {0}m/s", e.Value);
+                        break;
+                }
             });
         }
     }
