@@ -90,10 +90,14 @@ namespace UWP1
 
                 var IMUServices = GetIMUServices(result);
 
+                Debug.WriteLine("get acc char");
                 GattCharacteristicsResult accCharResult = await AccelerationService.GetCharacteristicsAsync();
+                Debug.WriteLine("get vel char");
                 GattCharacteristicsResult velCharResult = await VelocityService.GetCharacteristicsAsync();
+                Debug.WriteLine("get pos char");
                 GattCharacteristicsResult posCharResult = await PositionService.GetCharacteristicsAsync();
 
+                Debug.WriteLine("set chars");
                 if (accCharResult.Status == GattCommunicationStatus.Success)
                 {
                     foreach (GattCharacteristic accChar in accCharResult.Characteristics)
@@ -158,10 +162,12 @@ namespace UWP1
                             PosXChar, PosYChar, PosZChar
                         };
 
+                Debug.WriteLine("set notify");
                 foreach (GattCharacteristic c in chars)
                 {
                     GattCommunicationStatus status = await c.WriteClientCharacteristicConfigurationDescriptorAsync(
                             GattClientCharacteristicConfigurationDescriptorValue.Notify);
+                    Debug.WriteLine(status.ToString());
                     if (status == GattCommunicationStatus.Success)
                     {
                         c.ValueChanged += CharValueChangedSubscription;
@@ -209,39 +215,39 @@ namespace UWP1
         {
             DataReceivedEventArgs e = new DataReceivedEventArgs();
 
-            if (sender.Equals(AccXCharUuid))
+            if (sender.Uuid.Equals(AccXCharUuid))
             {
                 e.FieldIndex = 1;    
             }
-            else if (sender.Equals(AccYCharUuid))
+            else if (sender.Uuid.Equals(AccYCharUuid))
             {
                 e.FieldIndex = 2;
             }
-            else if (sender.Equals(AccZCharUuid))
+            else if (sender.Uuid.Equals(AccZCharUuid))
             {
                 e.FieldIndex = 3;
             }
-            else if (sender.Equals(VelXCharUuid))
+            else if (sender.Uuid.Equals(VelXCharUuid))
             {
                 e.FieldIndex = 4;
             }
-            else if (sender.Equals(VelYCharUuid))
+            else if (sender.Uuid.Equals(VelYCharUuid))
             {
                 e.FieldIndex = 5;
             }
-            else if (sender.Equals(VelZCharUuid))
+            else if (sender.Uuid.Equals(VelZCharUuid))
             {
                 e.FieldIndex = 6;
             }
-            else if (sender.Equals(PosXCharUuid))
+            else if (sender.Uuid.Equals(PosXCharUuid))
             {
                 e.FieldIndex = 7;
             }
-            else if (sender.Equals(PosYCharUuid))
+            else if (sender.Uuid.Equals(PosYCharUuid))
             {
                 e.FieldIndex = 8;
             }
-            else if (sender.Equals(PosZCharUuid))
+            else if (sender.Uuid.Equals(PosZCharUuid))
             {
                 e.FieldIndex = 9;
             }

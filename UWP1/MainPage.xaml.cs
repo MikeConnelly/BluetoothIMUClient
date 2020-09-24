@@ -96,31 +96,31 @@ namespace UWP1
                 switch (e.FieldIndex)
                 {
                     case 1:
-                        AX.Text = String.Format("Acc X: {0}m/s", e.Value);
+                        AX.Text = String.Format("Acc X: {0}m/s", e.Value.ToString("0.00"));
                         break;
                     case 2:
-                        AY.Text = String.Format("Acc Y: {0}m/s", e.Value);
+                        AY.Text = String.Format("Acc Y: {0}m/s", e.Value.ToString("0.00"));
                         break;
                     case 3:
-                        AZ.Text = String.Format("Acc Z: {0}m/s", e.Value);
+                        AZ.Text = String.Format("Acc Z: {0}m/s", e.Value.ToString("0.00"));
                         break;
                     case 4:
-                        VX.Text = String.Format("Vel X: {0}m/s", e.Value);
+                        VX.Text = String.Format("Vel X: {0}m/s", e.Value.ToString("0.00"));
                         break;
                     case 5:
-                        VY.Text = String.Format("Vel Y: {0}m/s", e.Value);
+                        VY.Text = String.Format("Vel Y: {0}m/s", e.Value.ToString("0.00"));
                         break;
                     case 6:
-                        VZ.Text = String.Format("Vel Z: {0}m/s", e.Value);
+                        VZ.Text = String.Format("Vel Z: {0}m/s", e.Value.ToString("0.00"));
                         break;
                     case 7:
-                        PX.Text = String.Format("Pos X: {0}m/s", e.Value);
+                        PX.Text = String.Format("Pos X: {0}m", e.Value.ToString("0.00"));
                         break;
                     case 8:
-                        PY.Text = String.Format("Pos Y: {0}m/s", e.Value);
+                        PY.Text = String.Format("Pos Y: {0}m", e.Value.ToString("0.00"));
                         break;
                     case 9:
-                        PZ.Text = String.Format("Pos Z: {0}m/s", e.Value);
+                        PZ.Text = String.Format("Pos Z: {0}m", e.Value.ToString("0.00"));
                         break;
                 }
             });
